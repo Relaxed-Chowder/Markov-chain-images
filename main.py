@@ -40,10 +40,10 @@ for image in os.listdir(directory):
             elif channels <= 3:
                 rgba = rgba + (255,)
 
-            redProbability[redBefore+1][rgba[0]] += 1
-            greenProbability[greenBefore+1][rgba[1]] += 1
-            blueProbability[blueBefore+1][rgba[2]] += 1
-            alphaProbability[alphaBefore+1][rgba[3]] += 1
+            redProbability[redBefore][rgba[0]] += 1
+            greenProbability[greenBefore][rgba[1]] += 1
+            blueProbability[blueBefore][rgba[2]] += 1
+            alphaProbability[alphaBefore][rgba[3]] += 1
 
             if (i, j) == (1,1):
                 print("channels: " + str(channels))
@@ -51,10 +51,10 @@ for image in os.listdir(directory):
                 print()
                 print()
 
-            redBefore = rgba[0]
-            greenBefore = rgba[1]
-            blueBefore = rgba[2]
-            alphaBefore = rgba[3]
+            redBefore = rgba[0] + 1
+            greenBefore = rgba[1] + 1
+            blueBefore = rgba[2] + 1
+            alphaBefore = rgba[3] + 1
             
     end = time.time()
     length = end - start

@@ -6,10 +6,10 @@ import csv
 import random
 
 # (hieght, width)
-redProbability = numpy.zeros((257, 256))
-greenProbability = numpy.zeros((257, 256))
-blueProbability = numpy.zeros((257, 256))
-alphaProbability = numpy.zeros((257, 256))
+redProbability = numpy.zeros((257, 256), dtype=int)
+greenProbability = numpy.zeros((257, 256), dtype=int)
+blueProbability = numpy.zeros((257, 256), dtype=int)
+alphaProbability = numpy.zeros((257, 256), dtype=int)
 
 x = 0
 directory = "inputed images"
@@ -19,10 +19,10 @@ print("if canont read it will make a marckov chain.")
 number = int(input())
 
 if number == 1:
-    redProbabilityCSV = [[]]
-    greenProbabilityCSV = [[]]
-    blueProbabilityCSV = [[]]
-    alphaProbabilityCSV = [[]]
+    redProbabilityCSV = []
+    greenProbabilityCSV = []
+    blueProbabilityCSV = []
+    alphaProbabilityCSV = []
     redBefore = 0
     greenBefore = 0
     blueBefore = 0
@@ -38,34 +38,40 @@ if number == 1:
     greenImage = numpy.zeros((height, width))
     blueImage = numpy.zeros((height, width))
     alphaImage = numpy.zeros((height, width))
-    with open("CSV" + "\\" + "redProbabilityCSV.csv",newline='') as my_csv:
-        redProbabilityCSV = list(csv.reader(my_csv, delimiter=','))
+    with open("CSV/redProbabilityCSV.csv", newline='') as my_csv:
+        redProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
 
+    with open("CSV/greenProbabilityCSV.csv", newline='') as my_csv:
+        greenProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
 
-    with open("CSV" + "\\" + "greenProbabilityCSV.csv",newline='') as my_csv:
-        greenProbabilityCSV = list(csv.reader(my_csv, delimiter=','))
+    with open("CSV/blueProbabilityCSV.csv", newline='') as my_csv:
+        blueProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
 
-    with open("CSV" + "\\" + "blueProbabilityCSV.csv",newline='') as my_csv:
-        blueProbabilityCSV = list(csv.reader(my_csv, delimiter=','))
-
-    with open("CSV" + "\\" + "alphaProbabilityCSV.csv",newline='') as my_csv:
-        alphaProbabilityCSV = list(csv.reader(my_csv, delimiter=','))
+    with open("CSV/alphaProbabilityCSV.csv", newline='') as my_csv:
+        alphaProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
 
     for i in range(height):
+        print(str(redProbabilityCSV[redBefore]))
         for j in range(width):
             dice = 0
-            for k in redProbability[redBefore]:
+            for k in redProbabilityCSV[redBefore]:
                 dice += int(k)
-                print(k)
 
-            random = random.randint(0, dice)
+                
+
+            randomness = random.randint(0, dice)
             kIndex = -1
-            for k in redProbability[redBefore]:
-                while random > 0:
-                    random -= k
-                    kIndex += 1
+            for k in redProbabilityCSV[redBefore]:
+                kIndex += 1
+                if randomness < 0:
+                    break
+                else:
+                    randomness -= int(k)
 
+            print(redBefore)
+            print()
             redImage[i][j] = kIndex
+            redBefore = kIndex
                 
                 
             
@@ -96,14 +102,16 @@ else:
                 rgba = im.getpixel((j, i))
 
                 if channels == 1:
-                    rgba = [rgba, rgba, rgba, 255]
-                elif channels <= 3:
+                    rgba = [int(rgba), int(rgba), int(rgba), 255]
+                elif channels == 2:
+                    rgba = [int(rgba[0]), int(rgba[0]), int(rgba[0]), int(rgba[1])]
+                elif channels == 3:
                     rgba = rgba + (255,)
 
-                redProbability[redBefore][rgba[0]] += 1
-                greenProbability[greenBefore][rgba[1]] += 1
-                blueProbability[blueBefore][rgba[2]] += 1
-                alphaProbability[alphaBefore][rgba[3]] += 1
+                redProbability[redBefore][int(rgba[0])] += 1
+                greenProbability[greenBefore][int(rgba[1])] += 1
+                blueProbability[blueBefore][int(rgba[2])] += 1
+                alphaProbability[alphaBefore][int(rgba[3])] += 1
 
                 if (j, i) == (1,1):
                     print("channels: " + str(channels))

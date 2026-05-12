@@ -14,42 +14,15 @@ alphaProbability = numpy.zeros((257, 256), dtype=int)
 x = 0
 directory = "inputed images"
 
-print("type (1) for image creation. type (2) for marckov chain creation.")
-print("if canont read it will make a marckov chain.")
-number = int(input())
 
-if number == 1:
+# red
+def redLayer(height, width):
     redProbabilityCSV = []
-    greenProbabilityCSV = []
-    blueProbabilityCSV = []
-    alphaProbabilityCSV = []
     redBefore = 0
-    greenBefore = 0
-    blueBefore = 0
-    alphaBefore = 0
-    height = int(input("input hieght: "))
-    width = int(input("input width: "))
-    while (not isinstance(height, int)) and (not isinstance(width, int)):
-        print("invalid inputs")
-        height = int(input("input hieght: "))
-        width = int(input("input width: "))
-    
     redImage = numpy.zeros((height, width))
-    greenImage = numpy.zeros((height, width))
-    blueImage = numpy.zeros((height, width))
-    alphaImage = numpy.zeros((height, width))
     with open("CSV/redProbabilityCSV.csv", newline='') as my_csv:
         redProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
-
-    with open("CSV/greenProbabilityCSV.csv", newline='') as my_csv:
-        greenProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
-
-    with open("CSV/blueProbabilityCSV.csv", newline='') as my_csv:
-        blueProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
-
-    with open("CSV/alphaProbabilityCSV.csv", newline='') as my_csv:
-        alphaProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
-
+    
     for i in range(height):
         print(str(redProbabilityCSV[redBefore]))
         for j in range(width):
@@ -57,25 +30,131 @@ if number == 1:
             for k in redProbabilityCSV[redBefore]:
                 dice += int(k)
 
-                
-
-            randomness = random.randint(0, dice)
+            randomness = random.randint(1, dice)
             kIndex = -1
             for k in redProbabilityCSV[redBefore]:
-                kIndex += 1
-                if randomness < 0:
+                if randomness <= 0:
                     break
                 else:
                     randomness -= int(k)
+                    kIndex += 1
 
             print(redBefore)
             print()
             redImage[i][j] = kIndex
             redBefore = kIndex
-                
-                
-            
+    return redImage
 
+# green
+def greenLayer(height, width):
+    greenProbabilityCSV = []
+    greenBefore = 0
+    greenImage = numpy.zeros((height, width))
+    with open("CSV/greenProbabilityCSV.csv", newline='') as my_csv:
+        greenProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
+    
+    for i in range(height):
+        print(str(greenProbabilityCSV[greenBefore]))
+        for j in range(width):
+            dice = 0
+            for k in greenProbabilityCSV[greenBefore]:
+                dice += int(k)
+
+            randomness = random.randint(1, dice)
+            kIndex = -1
+            for k in greenProbabilityCSV[greenBefore]:
+                if randomness <= 0:
+                    break
+                else:
+                    randomness -= int(k)
+                    kIndex += 1
+
+            print(greenBefore)
+            print()
+            greenImage[i][j] = kIndex
+            greenBefore = kIndex
+    return greenImage
+
+# blue
+def blueLayer(height, width):
+    blueProbabilityCSV = []
+    blueBefore = 0
+    blueImage = numpy.zeros((height, width))
+    with open("CSV/blueProbabilityCSV.csv", newline='') as my_csv:
+        blueProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
+    
+    for i in range(height):
+        print(str(blueProbabilityCSV[blueBefore]))
+        for j in range(width):
+            dice = 0
+            for k in blueProbabilityCSV[blueBefore]:
+                dice += int(k)
+
+            randomness = random.randint(1, dice)
+            kIndex = -1
+            for k in blueProbabilityCSV[blueBefore]:
+                if randomness <= 0:
+                    break
+                else:
+                    randomness -= int(k)
+                    kIndex += 1
+
+            print(blueBefore)
+            print()
+            blueImage[i][j] = kIndex
+            blueBefore = kIndex
+    return blueImage
+
+# alpha
+def alphaLayer(height, width):
+    alphaProbabilityCSV = []
+    alphaBefore = 0
+    alphaImage = numpy.zeros((height, width))
+    with open("CSV/alphaProbabilityCSV.csv", newline='') as my_csv:
+        alphaProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
+    
+    for i in range(height):
+        print(str(alphaProbabilityCSV[alphaBefore]))
+        for j in range(width):
+            dice = 0
+            for k in alphaProbabilityCSV[alphaBefore]:
+                dice += int(k)
+
+            randomness = random.randint(1, dice)
+            kIndex = -1
+            for k in alphaProbabilityCSV[alphaBefore]:
+                if randomness <= 0:
+                    break
+                else:
+                    randomness -= int(k)
+                    kIndex += 1
+
+            print(alphaBefore)
+            print()
+            alphaImage[i][j] = kIndex
+            alphaBefore = kIndex
+    return alphaImage
+
+
+print("type (1) for image creation. type (2) for marckov chain creation.")
+print("if canont read it will make a marckov chain.")
+number = int(input())
+
+
+
+if number == 1:
+    height = int(input("input hieght: "))
+    width = int(input("input width: "))
+    while (not isinstance(height, int)) and (not isinstance(width, int)):
+        print("invalid inputs")
+        height = int(input("input hieght: "))
+        width = int(input("input width: "))
+    
+    redImage = redLayer(height, width)
+    greenImage = greenLayer(height, width)
+    blueImage = blueLayer(height, width)
+    alphaImage = alphaLayer(height, width)
+        
 
 
 else:
@@ -129,20 +208,23 @@ else:
         print("completion took", length, "seconds")
         
     for i in range(len(redProbability)):
+        k = 0
         for j in range(len(redProbability[i])):
-            if not(redProbability[i][j] > 0):
-                print(str(i), str(j))
+            if redProbability[i][j] == 0:
+                k += 1
+            if k == 50:
+                print(str(i) + " " + str(j))
 
-    with open("CSV" + "\\" + "redProbabilityCSV.csv","w+") as my_csv:
+    with open("CSV" + "\\" + "redProbabilityCSV.csv","w+",newline="") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
         csvWriter.writerows(redProbability)
-    with open("CSV" + "\\" + "greenProbabilityCSV.csv","w+") as my_csv:
+    with open("CSV" + "\\" + "greenProbabilityCSV.csv","w+",newline="") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
         csvWriter.writerows(greenProbability)
-    with open("CSV" + "\\" + "blueProbabilityCSV.csv","w+") as my_csv:
+    with open("CSV" + "\\" + "blueProbabilityCSV.csv","w+",newline="") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
         csvWriter.writerows(blueProbability)
-    with open("CSV" + "\\" + "alphaProbabilityCSV.csv","w+") as my_csv:
+    with open("CSV" + "\\" + "alphaProbabilityCSV.csv","w+",newline="") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
         csvWriter.writerows(alphaProbability)
 

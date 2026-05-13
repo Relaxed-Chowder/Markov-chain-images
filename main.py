@@ -19,18 +19,22 @@ directory = "inputed images"
 def redLayer(height, width):
     redProbabilityCSV = []
     redBefore = 0
+    clicks = 0
     redImage = numpy.zeros((height, width))
     with open("CSV/redProbabilityCSV.csv", newline='') as my_csv:
         redProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
     
     for i in range(height):
-        print(str(redProbabilityCSV[redBefore]))
+        #print(str(redProbabilityCSV[redBefore]))
+        #print()
+        print(redBefore)
+        print()
         for j in range(width):
             dice = 0
             for k in redProbabilityCSV[redBefore]:
                 dice += int(k)
 
-            randomness = random.randint(1, dice)
+            randomness = random.randint(0, dice)
             kIndex = -1
             for k in redProbabilityCSV[redBefore]:
                 if randomness <= 0:
@@ -39,10 +43,11 @@ def redLayer(height, width):
                     randomness -= int(k)
                     kIndex += 1
 
-            print(redBefore)
-            print()
             redImage[i][j] = kIndex
-            redBefore = kIndex
+            redBefore = kIndex+1
+            if redBefore > 255:
+                clicks += 1
+    print("clicks: " + str(clicks))
     return redImage
 
 # green
@@ -54,7 +59,7 @@ def greenLayer(height, width):
         greenProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
     
     for i in range(height):
-        print(str(greenProbabilityCSV[greenBefore]))
+        #print(str(greenProbabilityCSV[greenBefore]))
         for j in range(width):
             dice = 0
             for k in greenProbabilityCSV[greenBefore]:
@@ -69,8 +74,8 @@ def greenLayer(height, width):
                     randomness -= int(k)
                     kIndex += 1
 
-            print(greenBefore)
-            print()
+            #print(greenBefore)
+            #print()
             greenImage[i][j] = kIndex
             greenBefore = kIndex
     return greenImage
@@ -84,7 +89,7 @@ def blueLayer(height, width):
         blueProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
     
     for i in range(height):
-        print(str(blueProbabilityCSV[blueBefore]))
+        #print(str(blueProbabilityCSV[blueBefore]))
         for j in range(width):
             dice = 0
             for k in blueProbabilityCSV[blueBefore]:
@@ -99,8 +104,8 @@ def blueLayer(height, width):
                     randomness -= int(k)
                     kIndex += 1
 
-            print(blueBefore)
-            print()
+            #print(blueBefore)
+            #print()
             blueImage[i][j] = kIndex
             blueBefore = kIndex
     return blueImage
@@ -114,7 +119,7 @@ def alphaLayer(height, width):
         alphaProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
     
     for i in range(height):
-        print(str(alphaProbabilityCSV[alphaBefore]))
+        #print(str(alphaProbabilityCSV[alphaBefore]))
         for j in range(width):
             dice = 0
             for k in alphaProbabilityCSV[alphaBefore]:
@@ -129,18 +134,24 @@ def alphaLayer(height, width):
                     randomness -= int(k)
                     kIndex += 1
 
-            print(alphaBefore)
-            print()
+            #print(alphaBefore)
+            #print()
             alphaImage[i][j] = kIndex
-            alphaBefore = kIndex
+            alphaBefore = kIndex+1
     return alphaImage
+
+
+def imageCreate(redImage, greenImage, blueImage, alphaImage):
+    pass
+
+
+
+
 
 
 print("type (1) for image creation. type (2) for marckov chain creation.")
 print("if canont read it will make a marckov chain.")
 number = int(input())
-
-
 
 if number == 1:
     height = int(input("input hieght: "))
@@ -150,10 +161,16 @@ if number == 1:
         height = int(input("input hieght: "))
         width = int(input("input width: "))
     
+    imageStart = time.time()
+    print("processing...")
     redImage = redLayer(height, width)
     greenImage = greenLayer(height, width)
     blueImage = blueLayer(height, width)
     alphaImage = alphaLayer(height, width)
+    #imageCreate(redImage, greenImage, blueImage, alphaImage)
+    imageEnd = time.time()
+    length = imageEnd - imageStart
+    print("finished! time took: " + str(length) + " seconds")
         
 
 

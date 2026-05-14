@@ -19,125 +19,93 @@ directory = "inputed images"
 def redLayer(height, width):
     redProbabilityCSV = []
     redBefore = 0
-    clicks = 0
+    counter = 1
+    click = 0
     redImage = numpy.zeros((height, width))
     with open("CSV/redProbabilityCSV.csv", newline='') as my_csv:
         redProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
     
     for i in range(height):
-        #print(str(redProbabilityCSV[redBefore]))
-        #print()
-        print(redBefore)
-        print()
         for j in range(width):
-            dice = 0
-            for k in redProbabilityCSV[redBefore]:
-                dice += int(k)
+            if (j, i) == (0, 0):
+                number = random.choices(list(range(0,256)), weights = redProbabilityCSV[0])
+            
+            number = random.choices(list(range(0,256)), weights = redProbabilityCSV[redBefore+1], k = height*width)
 
-            randomness = random.randint(0, dice)
-            kIndex = -1
-            for k in redProbabilityCSV[redBefore]:
-                if randomness <= 0:
-                    break
-                else:
-                    randomness -= int(k)
-                    kIndex += 1
+            redImage[i][j] = int(number[counter])
+            redBefore = int(number[counter])
+            #print(redBefore)
+            #print()
 
-            redImage[i][j] = kIndex
-            redBefore = kIndex+1
-            if redBefore > 255:
-                clicks += 1
-    print("clicks: " + str(clicks))
     return redImage
 
 # green
 def greenLayer(height, width):
     greenProbabilityCSV = []
     greenBefore = 0
+    counter = 1
     greenImage = numpy.zeros((height, width))
     with open("CSV/greenProbabilityCSV.csv", newline='') as my_csv:
         greenProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
     
     for i in range(height):
-        #print(str(greenProbabilityCSV[greenBefore]))
         for j in range(width):
-            dice = 0
-            for k in greenProbabilityCSV[greenBefore]:
-                dice += int(k)
+            if (j, i) == (0, 0):
+                number = random.choices(list(range(0,256)), weights = greenProbabilityCSV[0])
+            
+            number = random.choices(list(range(0,256)), weights = greenProbabilityCSV[greenBefore+1], k = height*width)
 
-            randomness = random.randint(1, dice)
-            kIndex = -1
-            for k in greenProbabilityCSV[greenBefore]:
-                if randomness <= 0:
-                    break
-                else:
-                    randomness -= int(k)
-                    kIndex += 1
-
+            greenImage[i][j] = int(number[counter])
+            greenBefore = int(number[counter])
             #print(greenBefore)
             #print()
-            greenImage[i][j] = kIndex
-            greenBefore = kIndex
+
     return greenImage
 
 # blue
 def blueLayer(height, width):
     blueProbabilityCSV = []
     blueBefore = 0
+    counter = 1
     blueImage = numpy.zeros((height, width))
     with open("CSV/blueProbabilityCSV.csv", newline='') as my_csv:
         blueProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
     
     for i in range(height):
-        #print(str(blueProbabilityCSV[blueBefore]))
         for j in range(width):
-            dice = 0
-            for k in blueProbabilityCSV[blueBefore]:
-                dice += int(k)
+            if (j, i) == (0, 0):
+                number = random.choices(list(range(0,256)), weights = blueProbabilityCSV[0])
+            
+            number = random.choices(list(range(0,256)), weights = blueProbabilityCSV[blueBefore+1], k = height*width)
 
-            randomness = random.randint(1, dice)
-            kIndex = -1
-            for k in blueProbabilityCSV[blueBefore]:
-                if randomness <= 0:
-                    break
-                else:
-                    randomness -= int(k)
-                    kIndex += 1
-
+            blueImage[i][j] = int(number[counter])
+            blueBefore = int(number[counter])
             #print(blueBefore)
             #print()
-            blueImage[i][j] = kIndex
-            blueBefore = kIndex
+
     return blueImage
 
 # alpha
 def alphaLayer(height, width):
     alphaProbabilityCSV = []
     alphaBefore = 0
+    counter = 1
     alphaImage = numpy.zeros((height, width))
     with open("CSV/alphaProbabilityCSV.csv", newline='') as my_csv:
         alphaProbabilityCSV = [[int(value) for value in row] for row in csv.reader(my_csv)]
     
     for i in range(height):
-        #print(str(alphaProbabilityCSV[alphaBefore]))
         for j in range(width):
-            dice = 0
-            for k in alphaProbabilityCSV[alphaBefore]:
-                dice += int(k)
+            if (j, i) == (0, 0):
+                number = random.choices(list(range(0,256)), weights = alphaProbabilityCSV[0])
+            
+            number = random.choices(list(range(0,256)), weights = alphaProbabilityCSV[alphaBefore+1], k = height*width)
 
-            randomness = random.randint(1, dice)
-            kIndex = -1
-            for k in alphaProbabilityCSV[alphaBefore]:
-                if randomness <= 0:
-                    break
-                else:
-                    randomness -= int(k)
-                    kIndex += 1
+            alphaImage[i][j] = int(number[counter])
+            alphaBefore = int(number[counter])
+            print(alphaBefore)
+            print()
 
-            #print(alphaBefore)
-            #print()
-            alphaImage[i][j] = kIndex
-            alphaBefore = kIndex+1
     return alphaImage
 
 
@@ -248,3 +216,4 @@ else:
     print(numpy.amax(redProbability))
     print(x)
     print("finished")
+

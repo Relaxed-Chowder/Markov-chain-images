@@ -5,14 +5,14 @@ import time
 import csv
 import random
 
-# (hieght, width)
+# (height, width)
 redProbability = numpy.zeros((257, 256), dtype=int)
 greenProbability = numpy.zeros((257, 256), dtype=int)
 blueProbability = numpy.zeros((257, 256), dtype=int)
 alphaProbability = numpy.zeros((257, 256), dtype=int)
 
 x = 0
-directory = "inputed images"
+directory = "inputted images"
 
 
 # red
@@ -103,15 +103,21 @@ def alphaLayer(height, width):
 
             alphaImage[i][j] = int(number[counter])
             alphaBefore = int(number[counter])
-            print(alphaBefore)
-            print()
+            #print(alphaBefore)
+            #print()
 
     return alphaImage
 
-
-def imageCreate(redImage, greenImage, blueImage, alphaImage):
-    pass
-
+# merge images
+def imageCreate(redImage, greenImage, blueImage, alphaImage, height, width):
+    im = Image.new(mode="RGBA", size=(width, height))
+    pixdata = im.load()
+    newData = []
+    for i in range(height):
+        for j in range(width):
+            pixdata[j, i] = (int(redImage[i][j]), int(greenImage[i][j]), int(blueImage[i][j]), int(alphaImage[i][j]))
+    
+    im.save("output.png", "PNG")
 
 
 
@@ -132,10 +138,15 @@ if number == 1:
     imageStart = time.time()
     print("processing...")
     redImage = redLayer(height, width)
+    print("Red image complete")
     greenImage = greenLayer(height, width)
+    print("Green image complete")
     blueImage = blueLayer(height, width)
+    print("Blue image complete")
     alphaImage = alphaLayer(height, width)
-    #imageCreate(redImage, greenImage, blueImage, alphaImage)
+    print("Alpha image complete")
+    imageCreate(redImage, greenImage, blueImage, alphaImage, height, width)
+    print("full image complete")
     imageEnd = time.time()
     length = imageEnd - imageStart
     print("finished! time took: " + str(length) + " seconds")
@@ -216,4 +227,3 @@ else:
     print(numpy.amax(redProbability))
     print(x)
     print("finished")
-
